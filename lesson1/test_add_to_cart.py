@@ -1,14 +1,11 @@
 from selenium import webdriver
-#from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import time
-#from webdriver_manager.chrome import ChromeDriverManager
 
-#webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver = webdriver.Chrome()
 
 
-def test_login_form():
+def test_add_items_to_the_cart():
     driver.get("https://www.saucedemo.com/")
 
     username_field = driver.find_element(By.XPATH, '//input[@data-test="username"]')
@@ -20,17 +17,19 @@ def test_login_form():
     login_button = driver.find_element(By.XPATH, '//input[@data-test="login-button"]')
     login_button.click()
 
-    time.sleep(5)
-    assert driver.current_url == "https://www.saucedemo.com/inventory.html"
 
-    driver.quit()
+    text_before = driver.find_element(By.XPATH, '//*[text()="Sauce Labs Backpack"]').text
 
 
 
+    button = driver.find_element(By.XPATH, '//*[@data-test="add-to-cart-sauce-labs-backpack"]')
+    button.click()
 
+    # time.sleep(3)
 
+    cart = driver.find_element(By.CSS_SELECTOR,'.shopping_cart_link')
+    cart.click()
 
+    text_after = driver.find_element(By.XPATH, '//*[text()="Sauce Labs Backpack"]').text
 
-
-
-
+    assert text_before == text_after
